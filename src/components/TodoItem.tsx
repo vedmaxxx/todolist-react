@@ -27,7 +27,7 @@ export const TodoItem: FC<ITodoItem> = (props) => {
         onClick={() => {
           deleteTodo(id);
         }}
-        className=" py-2 px-3  text-red-400 text-xs hover:text-red-700 border-solid border-2 rounded-md"
+        className=" py-2 px-3  text-red-400 text-xs hover:text-red-700 border-solid border-2 rounded-md transition"
       >
         Удалить
       </button>
