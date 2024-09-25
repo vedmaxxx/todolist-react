@@ -9,19 +9,28 @@ export const TodoItem: FC<ITodoItem> = (props) => {
   // объект пропсов деструктурируем в переменные
   const { id, title, complete } = props;
 
-  const { handleCompleteChange } = useContext(TodoContext);
+  const { handleCompleteChange, deleteTodo } = useContext(TodoContext);
 
   return (
-    <div key={id} className="flex flex-wrap my-1 w-auto">
+    <div key={id} className="my-2 flex w-full items-start gap-4">
       <input
-        className="me-2"
+        className=" my-2 min-w-5 min-h-5 "
         type="checkbox"
         checked={complete}
-        onChange={(e) => {
+        onChange={() => {
           handleCompleteChange(id);
         }}
       />
-      <div className=" font-normal">{title}</div>
+      <div className="font-normal self-center grow">{title}</div>
+
+      <button
+        onClick={() => {
+          deleteTodo(id);
+        }}
+        className=" py-2 px-3  text-red-400 text-xs hover:text-red-700 border-solid border-2 rounded-md"
+      >
+        Удалить
+      </button>
     </div>
   );
 };

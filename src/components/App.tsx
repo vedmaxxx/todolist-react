@@ -4,14 +4,12 @@ import { ITodo } from "../types/data";
 import { TodoList } from "./TodoList";
 import { TodoContext } from "../contexts/TodoContext";
 import "../styles/index.css";
+import AddTodo from "./AddTodo";
 
 const App: FC = () => {
-  const [value, setValue] = useState<string>("");
-
   const [todos, setTodos] = useState<ITodo[]>([]);
 
   const handleCompleteChange = (id: number) => {
-    // создаем новый массив
     const newTodos = todos.map((todo) =>
       todo.id === id
         ? { id: todo.id, title: todo.title, complete: !todo.complete }
@@ -19,14 +17,22 @@ const App: FC = () => {
     );
     setTodos(newTodos);
   };
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setValue(e.target.value);
-  };
 
-  const addTodo = () => {
+  const addTodo = (value: string) => {
     if (value === "") return;
     setTodos([...todos, { id: Date.now(), title: value, complete: false }]);
-    setValue("");
+    console.log("addTodo");
+  };
+
+  const deleteTodo = (id: number) => {
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos);
+  };
+
+  const getActiveTodos = () => {
+    if (todos.filter((todo) => !todo.complete).length !== 0)
+      return <TodoList items={todos.filter((todo) => !todo.complete)} />;
+    else return <div className="my-2 text-gray-500">Задач пока нет...</div>;
   };
 
   return (
@@ -35,20 +41,13 @@ const App: FC = () => {
         <h1 className="text-3xl font-bold">Список задач</h1>
       </header>
       <hr className="my-5" />
-      <div className="flex">
-        <input
-          value={value}
-          onChange={handleChange}
-          placeholder="Введите задачу"
-        />
-        <button onClick={addTodo}>Добавить</button>
-      </div>
+      <AddTodo addTodo={addTodo} />
       <hr className="my-5" />
 
-      <TodoContext.Provider value={{ handleCompleteChange }}>
+      <TodoContext.Provider value={{ handleCompleteChange, deleteTodo }}>
         <div>
           <h3 className="text-2xl font-bold">Активные</h3>
-          <TodoList items={todos.filter((todo) => !todo.complete)} />
+          {getActiveTodos()}
         </div>
         <hr className="my-5" />
 
