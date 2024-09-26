@@ -20,7 +20,10 @@ const AddTodo: FC<AddTodoProps> = ({ addTodo }) => {
         placeholder="Введите задачу"
       />
       <button
-        onClick={() => addTodo(value)}
+        onClick={() => {
+          addTodo(value);
+          setValue("");
+        }}
         className="py-2 px-6 bg-sky-700 border-solid border-2 border-sky-700 text-white transition hover:bg-white hover:text-sky-700 rounded-md"
       >
         Добавить

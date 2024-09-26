@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from "react";
+import { FC, useState } from "react";
 
 import { ITodo } from "../types/data";
 import { TodoList } from "./TodoList";
@@ -22,12 +22,19 @@ const App: FC = () => {
   const addTodo = (value: string) => {
     if (value === "") return;
     setTodos([...todos, { id: Date.now(), title: value, complete: false }]);
-    console.log("addTodo");
   };
 
   const deleteTodo = (id: number) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
+  };
+
+  const editTodo = (id: number, value: string) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? (todo = { ...todo, title: value }) : todo
+      )
+    );
   };
 
   const getActiveTodos = () => {
@@ -45,7 +52,9 @@ const App: FC = () => {
       <AddTodo addTodo={addTodo} />
       <hr className="my-5" />
 
-      <TodoContext.Provider value={{ handleCompleteChange, deleteTodo }}>
+      <TodoContext.Provider
+        value={{ handleCompleteChange, deleteTodo, editTodo }}
+      >
         <div>
           <h3 className="text-2xl font-bold">Активные</h3>
           {getActiveTodos()}
@@ -67,30 +76,32 @@ const App: FC = () => {
               Выполненные
             </button>
 
-            <button
-              onClick={() => {
-                setVisibleCompleted(!visibleCompleted);
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1}
-                stroke="black"
-                className={
-                  visibleCompleted
-                    ? " hover:bg-sky-100 rounded-full transition size-6 "
-                    : "  rounded-full transition size-6 rotate-90"
-                }
+            {todos.filter((todo) => todo.complete).length !== 0 ? (
+              <button
+                onClick={() => {
+                  setVisibleCompleted(!visibleCompleted);
+                }}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1}
+                  stroke="black"
+                  className={
+                    visibleCompleted
+                      ? " hover:bg-sky-100 rounded-full transition size-6 "
+                      : "  rounded-full transition size-6 rotate-90"
+                  }
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </button>
+            ) : null}
           </div>
 
           {visibleCompleted ? (

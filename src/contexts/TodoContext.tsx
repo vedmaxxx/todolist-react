@@ -4,6 +4,7 @@ import { createContext } from "react";
 interface TodoCallback {
   handleCompleteChange: (id: number) => void;
   deleteTodo: (id: number) => void;
+  editTodo: (id: number, value: string) => void;
 }
 
 // Создаем объект контекста TodoContext, который хранит объект TodoCallback со свойством, в котором
@@ -11,4 +12,5 @@ interface TodoCallback {
 export const TodoContext = createContext<TodoCallback>({
   handleCompleteChange: () => {},
   deleteTodo: () => {},
+  editTodo: () => {},
 });
