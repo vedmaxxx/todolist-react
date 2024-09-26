@@ -8,6 +8,7 @@ import AddTodo from "./AddTodo";
 
 const App: FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
+  const [visibleCompleted, setVisibleCompleted] = useState<boolean>(false);
 
   const handleCompleteChange = (id: number) => {
     const newTodos = todos.map((todo) =>
@@ -36,8 +37,8 @@ const App: FC = () => {
   };
 
   return (
-    <div className=" sm p-5 flex flex-col space-y-4 w-[36rem]">
-      <header>
+    <div className="m-auto sm py-10 px-5 flex flex-col space-y-4 w-[36rem]">
+      <header className="">
         <h1 className="text-3xl font-bold">Список задач</h1>
       </header>
       <hr className="my-5" />
@@ -52,8 +53,49 @@ const App: FC = () => {
         <hr className="my-5" />
 
         <div>
-          <h3 className="text-lg font-bold text-gray-500">Выполненные</h3>
-          <TodoList items={todos.filter((todo) => todo.complete)} />
+          <div className="py-1 px-2 rounded-full flex w-fit items-center gap-x-2 hover:bg-sky-100  transition  basis-0 shrink-0">
+            <button
+              onClick={() => {
+                setVisibleCompleted(!visibleCompleted);
+              }}
+              className={
+                visibleCompleted
+                  ? "text-lg font-bold   text-sky-700"
+                  : "text-lg font-bold   text-gray-500"
+              }
+            >
+              Выполненные
+            </button>
+
+            <button
+              onClick={() => {
+                setVisibleCompleted(!visibleCompleted);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1}
+                stroke="black"
+                className={
+                  visibleCompleted
+                    ? " hover:bg-sky-100 rounded-full transition size-6 "
+                    : "  rounded-full transition size-6 rotate-90"
+                }
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {visibleCompleted ? (
+            <TodoList items={todos.filter((todo) => todo.complete)} />
+          ) : null}
         </div>
       </TodoContext.Provider>
     </div>
